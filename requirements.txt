@@ -1,0 +1,4 @@
+firecrawl-py>=0.0.16
+requests>=2.25.0
+jsbeautifier>=1.15.0
+pathlib2>=2.3.0 

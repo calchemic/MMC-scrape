@@ -1,0 +1,9 @@
+{
+  "title": "index_scorm_Course_Title",
+  "scrapeId": "cfcc3b76-680a-43bb-a969-7a010b67bfd3",
+  "sourceURL": "https://www.michaelmanagement.com/files/training/IM101/im101_03/imsmanifest.xml",
+  "url": "https://www.michaelmanagement.com/files/training/im101/im101_03/imsmanifest.xml",
+  "statusCode": 200,
+  "contentType": "text/xml",
+  "proxyUsed": "basic"
+}

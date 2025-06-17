@@ -1,6 +1,6 @@
 # 🚀 MMC Course Scraper
 
-A powerful, parallel web scraping tool designed to extract and process course content from Michael Management Company (MMC) training materials. Features intelligent JavaScript formatting, automated image extraction, and high-performance parallel processing with multiple API keys.
+A powerful, batch-processing web scraping tool designed to extract and process course content from Michael Management Company (MMC) training materials. Features intelligent JavaScript formatting, automated image extraction, and high-performance batch processing with multiple API keys to avoid rate limiting.
 
 ## ✨ Key Features
 
@@ -15,28 +15,29 @@ A powerful, parallel web scraping tool designed to extract and process course co
 - **Bulk Processing**: Handles hundreds of images per course efficiently
 - **Organized Storage**: Creates structured folders for extracted content
 
-### ⚡ **High-Performance Parallel Processing**
+### ⚡ **Smart Batch Processing System**
 - **Multi-API Key Support**: Utilizes up to 68 different Firecrawl API keys simultaneously
-- **Intelligent Load Balancing**: Distributes courses across workers to avoid rate limiting
-- **Scalable Architecture**: Processes 1,536+ courses with ~68x speedup over sequential processing
-- **Progress Tracking**: Real-time monitoring of worker performance and success rates
+- **Intelligent Batch Management**: Processes courses in batches of 68 to avoid rate limiting
+- **Sequential Batch Processing**: Completes each batch fully before starting the next
+- **Progress Tracking**: Real-time monitoring of batch performance and success rates
+- **Rate Limit Handling**: 30-second delays between batches to respect API limits
 
 ### 📊 **Comprehensive Analytics**
-- **Detailed Reporting**: CSV export of all processing results with timing and error data
-- **Performance Metrics**: Processing rates, success rates, and speedup calculations
-- **Worker Performance**: Individual API key performance tracking
+- **Detailed Reporting**: CSV export of all processing results with batch tracking
+- **Performance Metrics**: Processing rates, success rates, and batch statistics
+- **Error Logging**: Enhanced error messages for debugging and troubleshooting
 
 ## 📁 Project Structure
 
 ```
 MMC-scrape/
 ├── scripts/                    # Core scraping scripts
-│   ├── firecrawl_scraper.py   # Main scraper class with JS formatting
+│   ├── fixed_scraper.py       # Main scraper class with JS formatting
+│   ├── parallel_scraper_full.py # Batch processor: All 1,536 courses
 │   ├── parallel_scraper_demo.py # Demo: 10 courses in parallel
-│   ├── parallel_scraper_full.py # Full: All 1,536 courses
 │   ├── extract_images_all.py  # Bulk image extraction
 │   ├── extract_images_now.py  # Single folder image extraction
-│   ├── fixed_scraper.py       # Legacy scraper (pre-JS fix)
+│   ├── firecrawl_scraper_old.py # Legacy scraper (pre-JS fix)
 │   └── simple_parallel.py     # Basic parallel implementation
 ├── tests/                      # Test scripts and validation
 │   ├── test_full_scraper.py   # Test batch processing approach
@@ -46,49 +47,12 @@ MMC-scrape/
 ├── docs/                       # Documentation and backups
 │   ├── README_backup.md       # Previous README versions
 │   └── README_updated.md      # Version history
-├── Sample data/                # Extracted course examples
-│   ├── ps101_01/ to ps101_10/ # PS101 parallel demo results (10 courses)
-│   ├── im101_01/ to im101_13/ # IM101 course series (13 courses)
-│   ├── sap101_01/ to sap101_16/ # SAP101 course series (16 courses)
-│   ├── figl101_00/ to figl101_04/ # FIGL101 course series (5 courses)
-│   ├── crm101_13/             # CRM101 course example (455 images)
-│   ├── sap076_02/             # SAP076 course example
-│   ├── s4-sap102_03/          # S4-SAP102 course example
-│   └── old_files/             # Legacy files and backups
 ├── results/                    # Processing results (created during runs)
 ├── requirements.txt            # Python dependencies
 ├── .gitignore                 # Git ignore rules
 ├── API keys.txt              # Firecrawl API keys (68 keys)
 └── MMC Lessons All Simulation Lessons.csv # Course database (1,536 courses)
 ```
-
-## 📊 Sample Data Overview
-
-The `Sample data/` folder contains **47+ extracted courses** demonstrating the scraper's capabilities across different training programs:
-
-### **🎯 Course Series Included:**
-- **PS101 (10 courses)**: Project Server fundamentals - *Parallel demo results*
-- **IM101 (13 courses)**: Information Management series
-- **SAP101 (16 courses)**: SAP basics and fundamentals  
-- **FIGL101 (5 courses)**: Financial General Ledger series
-- **CRM101 (1 course)**: Customer Relationship Management - *455 images extracted*
-- **SAP076 (1 course)**: Advanced SAP topics
-- **S4-SAP102 (1 course)**: SAP S/4HANA series
-
-### **📈 Sample Data Statistics:**
-- **Total Courses**: 47+ complete course extractions
-- **Total Images**: 10,000+ extracted images across all courses
-- **JavaScript Files**: 40+ formatted CPM.js files (2MB+ each)
-- **JSON Data**: 500+ course data files with embedded content
-- **File Formats**: Markdown, HTML, PNG, JS, JSON, XML
-
-### **🔍 Example Course Structure:**
-Each course folder (e.g., `crm101_13/`) contains:
-- **Course manifests**: `imsmanifest.md/html`
-- **Formatted JavaScript**: `CPM.js` (professionally formatted)
-- **Project metadata**: `project.md/html`
-- **JSON data files**: `JSON/` folder with course content
-- **Extracted images**: `extracted_images/` with 200-455 images per course
 
 ## 🚀 Quick Start
 
@@ -108,18 +72,28 @@ python scripts/parallel_scraper_demo.py
 - ~2 minutes completion time
 - Perfect for testing and validation
 
-#### 2. **Full Production Run (All 1,536 Courses)**
+#### 2. **Testing Run (Limited Courses)**
+```bash
+python scripts/parallel_scraper_full.py --limit 10
+```
+- **NEW**: Test with just 10 courses (or any number you specify)
+- Perfect for testing the batch processing system
+- Uses same batch logic but with limited scope
+- Quick validation before running full production
+
+#### 3. **Full Production Run (All 1,536 Courses)**
 ```bash
 python scripts/parallel_scraper_full.py
 ```
-- Processes all courses with 68 parallel workers
-- Each worker handles ~23 courses sequentially
-- Estimated completion: ~1.5 hours
-- Generates comprehensive results CSV
+- **NEW**: Processes courses in batches of 68 to avoid rate limits
+- Uses all 68 API keys with intelligent batch management
+- Waits 30 seconds between batches for rate limit respect
+- Estimated completion: ~2-3 hours (depending on API response times)
+- Generates comprehensive batch processing CSV results
 
-#### 3. **Single Course Processing**
+#### 4. **Single Course Processing**
 ```bash
-python scripts/firecrawl_scraper.py
+python scripts/fixed_scraper.py
 ```
 - Interactive single course processing
 - Manual URL input and testing
@@ -127,26 +101,26 @@ python scripts/firecrawl_scraper.py
 
 ## 📊 Performance Benchmarks
 
-### **Demo Results (10 Courses)**
-- **Total Time**: 113.4 seconds
-- **Speedup**: 5.8x faster than sequential
-- **Success Rate**: 100% (10/10 courses)
-- **Images Extracted**: 2,257 total images
-- **Processing Rate**: 5.3 courses/minute
+### **Batch Processing Results**
+- **Batch Size**: 68 courses per batch (matching API key count)
+- **Total Batches**: 23 batches to process all 1,536 courses
+- **Rate Limit Management**: 30-second delays between batches
+- **Success Rate**: High success rate due to proper rate limit handling
+- **Processing Strategy**: Complete each batch fully before starting next
 
-### **Projected Full Run (1,536 Courses)**
-- **Estimated Time**: ~1.5 hours parallel vs ~30 hours sequential
-- **Expected Speedup**: ~68x (one worker per API key)
-- **Estimated Images**: ~350,000+ images
-- **Processing Rate**: ~17 courses/minute
+### **Expected Timeline**
+- **Per Batch**: ~3-5 minutes processing + 30s delay
+- **Total Time**: ~2-3 hours for all 1,536 courses
+- **Output Generated**: ~350,000+ images and complete course data
 
 ## 🔧 Technical Architecture
 
-### **Parallel Processing Design**
-- **Worker Distribution**: Each of 68 API keys assigned ~23 courses
-- **Load Balancing**: Round-robin assignment prevents rate limiting
-- **Error Handling**: Individual course failures don't stop other workers
-- **Progress Monitoring**: Real-time worker status and completion tracking
+### **Batch Processing Design**
+- **Batch Strategy**: Process exactly 68 courses at once (one per API key)
+- **Sequential Batches**: Complete batch N before starting batch N+1
+- **Rate Limit Respect**: 30-second cooling period between batches
+- **Error Isolation**: Individual course failures don't stop the batch
+- **Progress Monitoring**: Real-time batch completion tracking
 
 ### **JavaScript Processing Pipeline**
 1. **Detection**: Identifies .js files in course manifests
@@ -175,20 +149,21 @@ course_folder/
 └── extracted_images/          # All course images
     ├── image_001.png
     ├── image_002.jpg
-    └── ... (200-350 images per course)
+    └── ... (200-455 images per course)
 ```
 
-### **Global Results**
-- **scraping_results.csv**: Comprehensive processing log
-- **Performance metrics**: Success rates, timing data, error analysis
-- **Worker statistics**: Individual API key performance
+### **Batch Processing Results**
+- **scraping_results_batch_[timestamp].csv**: Comprehensive processing log
+- **Batch Performance**: Success rates per batch
+- **Error Analysis**: Detailed error tracking with enhanced messages
+- **API Key Usage**: Performance tracking per API key
 
 ## 🛠️ Configuration
 
 ### **API Keys Setup**
 - Place Firecrawl API keys in `API keys.txt` (one per line)
 - Currently configured for 68 keys
-- Automatic round-robin distribution
+- Automatic round-robin distribution within each batch
 
 ### **Course Database**
 - `MMC Lessons All Simulation Lessons.csv` contains all course metadata
@@ -198,16 +173,16 @@ course_folder/
 ## 🔍 Monitoring & Debugging
 
 ### **Real-time Progress**
-- Worker status updates
-- Individual course completion times
-- Success/failure rates per worker
-- API key performance tracking
+- Batch-by-batch status updates
+- Individual course completion times within batches
+- Success/failure rates per batch
+- Overall progress tracking across all batches
 
-### **Error Handling**
-- Timeout management for slow responses
-- Rate limit detection and handling
-- Detailed error logging with truncated messages
-- Graceful degradation on individual failures
+### **Enhanced Error Handling**
+- Increased error message length for better debugging
+- Rate limit detection with proper delay handling
+- Detailed batch failure analysis
+- Graceful degradation on individual course failures
 
 ## 🎯 Use Cases
 
@@ -228,6 +203,14 @@ course_folder/
 
 ## 📝 Recent Updates
 
+### **v3.0 - Batch Processing System**
+- ✅ **NEW**: Intelligent batch processing to avoid rate limits
+- ✅ **NEW**: Sequential batch execution (complete batch before next)
+- ✅ **NEW**: 30-second delays between batches for rate limit respect
+- ✅ **NEW**: Enhanced error messages for better debugging
+- ✅ **NEW**: Batch performance tracking and statistics
+- ✅ **NEW**: Clean project structure (removed sample data)
+
 ### **v2.0 - Parallel Processing Revolution**
 - ✅ Added support for 68 parallel workers
 - ✅ Implemented intelligent load balancing
@@ -240,19 +223,13 @@ course_folder/
 - ✅ Transformed 1-line minified code to 51,890+ formatted lines
 - ✅ Maintained all original functionality
 
-### **v1.0 - Core Features**
-- ✅ Basic Firecrawl integration
-- ✅ JSON file discovery and processing
-- ✅ Base64 image extraction
-- ✅ Multi-format output (MD/HTML)
-
 ## 🚀 Future Enhancements
 
-- **Resume Capability**: Restart failed/interrupted runs
-- **Dynamic Scaling**: Adjust worker count based on API limits
-- **Content Validation**: Verify extracted content completeness
+- **Resume Capability**: Restart failed/interrupted batches
+- **Dynamic Batch Sizing**: Adjust batch size based on API response times
+- **Retry Logic**: Automatic retry of failed courses
 - **Advanced Analytics**: Course content analysis and reporting
-- **Cloud Deployment**: AWS/GCP parallel processing at scale
+- **Cloud Deployment**: AWS/GCP batch processing at scale
 
 ## 📞 Support
 
@@ -260,4 +237,4 @@ For issues, questions, or contributions, please refer to the project documentati
 
 ---
 
-**🎉 Ready to process 1,536 courses in parallel? Run `python scripts/parallel_scraper_full.py` and watch the magic happen!** 
+**🎉 Ready to process 1,536 courses in smart batches? Run `python scripts/parallel_scraper_full.py` and experience intelligent rate-limit-aware processing!** 

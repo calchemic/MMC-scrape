@@ -1,9 +1,0 @@
-{
-  "title": "index_SCORM_Course_Title",
-  "scrapeId": "bf0046dc-1059-4c41-915b-d5320b0e3f24",
-  "sourceURL": "https://www.michaelmanagement.com/files/training/SAP101/sap101_14/imsmanifest.xml",
-  "url": "https://www.michaelmanagement.com/files/training/sap101/sap101_14/imsmanifest.xml",
-  "statusCode": 200,
-  "contentType": "text/xml",
-  "proxyUsed": "basic"
-}

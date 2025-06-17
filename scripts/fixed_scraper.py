@@ -115,10 +115,11 @@ class CourseContentScraper:
     def run_extract_images_all(self, json_folder_path):
         """Run extract_images_all.py on the JSON folder to extract all images"""
         try:
-            if os.path.exists('extract_images_all.py'):
+            extract_script_path = 'scripts/extract_images_all.py'
+            if os.path.exists(extract_script_path):
                 print(f"Running extract_images_all.py on JSON folder: {json_folder_path}")
                 result = subprocess.run([
-                    'python3', 'extract_images_all.py', 
+                    'python3', extract_script_path, 
                     str(json_folder_path)
                 ], capture_output=True, text=True)
                 
@@ -140,7 +141,7 @@ class CourseContentScraper:
                 else:
                     print(f"❌ Error running extract_images_all.py: {result.stderr}")
             else:
-                print("⚠️  extract_images_all.py not found in current directory - skipping image extraction")
+                print("⚠️  extract_images_all.py not found in scripts directory - skipping image extraction")
         except Exception as e:
             print(f"❌ Error running extract_images_all.py: {str(e)}")
     

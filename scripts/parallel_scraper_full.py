@@ -9,7 +9,7 @@ from fixed_scraper import CourseContentScraper
 def load_all_urls(limit=None):
     """Load URLs from CSV with optional limit"""
     urls = []
-    with open("bad_modules_filtered_840courses_1750453449.csv", "r") as f:
+    with open("bad_modules_filtered_127courses_1750458981.csv", "r") as f:
         reader = csv.DictReader(f)
         for i, row in enumerate(reader):
             # Apply limit if specified
